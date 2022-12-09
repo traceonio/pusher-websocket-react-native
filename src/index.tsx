@@ -161,6 +161,9 @@ export class Pusher {
     onDecryptionFailure?: (eventName: string, reason: string) => void;
     onMemberAdded?: (channelName: string, member: PusherMember) => void;
     onMemberRemoved?: (channelName: string, member: PusherMember) => void;
+    host?: string;
+    wsPort?: number;
+    wssPort?: number;
   }) {
     this.addListener('onConnectionStateChange', (event: any) => {
       this.connectionState = event.currentState.toUpperCase();
@@ -267,6 +270,9 @@ export class Pusher {
       authorizerTimeoutInSeconds: args.authorizerTimeoutInSeconds,
       authorizer: args.onAuthorizer ? true : false,
       proxy: args.proxy,
+      host: args.host,
+      wsPort: args.wsPort,
+      wssPort: args.wssPort,
     });
   }
 
