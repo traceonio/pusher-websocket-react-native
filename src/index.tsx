@@ -179,7 +179,10 @@ export class Pusher {
       const eventName = event.eventName;
       const data = event.data;
       const userId = event.userId;
-      const channel = this.channels.get(channelName)!;
+      const channel = this.channels.get(channelName);
+      if (!channel) {
+          return;
+      }
 
       switch (eventName) {
         case 'pusher_internal:subscription_succeeded':
@@ -189,12 +192,12 @@ export class Pusher {
             const userInfo = decodedData?.presence?.hash[_userId];
             var member = new PusherMember(_userId, userInfo);
             channel.members.set(member.userId, member);
-            if (_userId === userId) {
+            if (channel && _userId === userId) {
               channel.me = member;
             }
           }
           args.onSubscriptionSucceeded?.(channelName, decodedData);
-          channel?.onSubscriptionSucceeded?.(decodedData);
+          channel.onSubscriptionSucceeded?.(decodedData);
           break;
         case 'pusher_internal:subscription_count':
           // Depending on the platform implementation we get json or a Map.
@@ -209,7 +212,7 @@ export class Pusher {
         default:
           const pusherEvent = new PusherEvent(event);
           args.onEvent?.(pusherEvent);
-          channel?.onEvent?.(pusherEvent);
+          channel.onEvent?.(pusherEvent);
           break;
       }
     });
