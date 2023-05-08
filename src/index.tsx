@@ -209,7 +209,7 @@ export class Pusher {
         default:
           const pusherEvent = new PusherEvent(event);
           args.onEvent?.(pusherEvent);
-          channel.onEvent?.(pusherEvent);
+          channel?.onEvent?.(pusherEvent);
           break;
       }
     });
